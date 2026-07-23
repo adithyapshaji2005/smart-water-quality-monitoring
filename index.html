@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#0b1120;
+color:white;
+display:flex;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.sidebar{
+width:260px;
+background:#111827;
+padding:30px 20px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+position:fixed;
+height:100vh;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+margin-bottom:50px;
+}
+
+.logo span{
+color:#38bdf8;
+}
+
+.menu a{
+display:block;
+text-decoration:none;
+color:#cbd5e1;
+padding:14px 18px;
+border-radius:14px;
+margin-bottom:14px;
+transition:0.3s;
+font-size:15px;
+}
+
+.menu a:hover,
+.menu a.active{
+background:#1e293b;
+color:white;
+}
+
+.sidebar-footer{
+background:linear-gradient(135deg,#2563eb,#38bdf8);
+padding:20px;
+border-radius:20px;
+font-size:14px;
+line-height:1.6;
+}
+
+.main{
+margin-left:260px;
+width:calc(100% - 260px);
+padding:35px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+}
+
+.live-badge{
+background:#16a34a;
+padding:10px 18px;
+border-radius:999px;
+font-size:14px;
+}
+
+.hero{
+background:linear-gradient(135deg,#2563eb,#7c3aed);
+border-radius:28px;
+padding:40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+gap:30px;
+flex-wrap:wrap;
+}
+
+.hero-text h2{
+font-size:42px;
+margin-bottom:15px;
+}
+
+.hero-text p{
+line-height:1.8;
+max-width:600px;
+}
+
+.hero img{
+width:100%;
+max-width:320px;
+border-radius:24px;
+object-fit:cover;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:24px;
+}
+
+.card{
+background:#111827;
+padding:28px;
+border-radius:24px;
+}
+
+.card h3{
+font-size:15px;
+color:#94a3b8;
+margin-bottom:20px;
+}
+
+.value{
+font-size:42px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.small{
+font-size:14px;
+color:#94a3b8;
+line-height:1.6;
+}
+
+.safe{
+color:#22c55e;
+}
+
+.unsafe{
+color:#ef4444;
+}
+
+.offline{
+color:#f59e0b;
+}
+
+@media(max-width:900px){
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+width:100%;
+}
+
+.hero{
+flex-direction:column;
+text-align:center;
+}
+
+.hero img{
+width:100%;
+max-width:400px;
+}
+
+}
+
+#customAlert{
+
+position:fixed;
+top:30px;
+right:30px;
+background:#ef4444;
+color:white;
+padding:16px 25px;
+border-radius:14px;
+font-weight:600;
+
+opacity:0;
+
+transform:translateY(-30px);
+
+transition:.5s;
+
+z-index:9999;
+
+}
+
+#customAlert.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+.condition-box{
+
+margin-top:30px;
+background:#111827;
+padding:25px;
+border-radius:24px;
+
+}
+
+.condition-box h3{
+
+margin-bottom:15px;
+
+}
+
+#waterCondition{
+
+color:#cbd5e1;
+line-height:1.8;
+
+.analysis-card{
+
+margin-top:20px;
+
+width:100%;
+
+background:#111827;
+
+padding:20px 30px;
+
+border-radius:24px;
+
+display:flex;
+
+align-items:center;
+
+gap:30px;
+
+min-height:90px;
+
+}
+
+.analysis-card h3{
+
+min-width:180px;
+
+}
+
+#waterCondition{
+
+font-size:17px;
+
+color:#cbd5e1;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div>
+
+<div class="logo">
+💧 Water<span>Monitor</span>
+</div>
+
+<div class="menu">
+
+<a href="index.html" class="active">Dashboard</a>
+
+<a href="analytics.html">Analytics</a>
+
+<a href="about.html">About Project</a>
+
+<a href="#" onclick="logout()">Logout</a>
+
+</div>
+
+</div>
+
+<div class="sidebar-footer">
+Smart Water Quality Monitoring & Alert System using ESP32 and IoT.
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+<h1 id="welcomeText">Dashboard</h1>
+
+<div class="live-badge" id="liveTime">
+● LIVE DATA
+</div>
+
+</div>
+
+<div class="hero">
+
+<div class="hero-text">
+
+<h2>Smart Water Quality Monitoring</h2>
+
+<p>
+Real-time monitoring of water quality using ESP32, pH sensor, turbidity sensor and temperature sensor integrated with ThingSpeak cloud platform.
+</p>
+
+</div>
+
+<img src="water.jpg" alt="Water Monitoring">
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Temperature</h3>
+
+<div class="value" id="temp">--</div>
+
+<div class="small">
+Current water temperature
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Turbidity</h3>
+
+<div class="value" id="turb">--</div>
+
+<div class="small">
+Water clarity level
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>pH Value</h3>
+
+<div class="value" id="ph">--</div>
+
+<div class="small">
+Acidity / alkalinity level
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Water Status</h3>
+
+<div class="value safe" id="status">--</div>
+
+<div class="small" id="alert">
+
+</div>
+
+<br>
+
+<div class="small">
+
+<b>Condition:</b>
+
+<span id="waterCondition">
+
+Monitoring...
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let user = localStorage.getItem("userName");
+
+if(!user){
+
+document.getElementById("welcomeText").innerText="Dashboard";
+
+}
+else{
+
+document.getElementById("welcomeText").innerText=
+"Hey " + user + " 👋";
+
+}
+
+function logout(){
+
+window.location.href="login.html";
+
+}
+
+let alertShown=false;
+
+function updateData(){
+
+fetch("https://api.thingspeak.com/channels/3356770/feeds/last.json")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let lastUpdate = new Date(data.created_at);
+let now = new Date();
+
+let diff = (now - lastUpdate) / 1000;
+
+if(diff > 90){
+
+document.getElementById("status").innerHTML=
+"OFFLINE";
+
+document.getElementById("status").className=
+"value unsafe";
+
+document.getElementById("temp").innerHTML="--";
+
+document.getElementById("turb").innerHTML="--";
+
+document.getElementById("ph").innerHTML="--";
+
+document.getElementById("adminOutput").innerHTML=
+
+"<b>System Status</b><br><br>"+
+
+"🔴 ESP32 Offline<br><br>"+
+
+"Last data received more than 1 minute ago.";
+
+return;
+
+}
+
+let temp=parseFloat(data.field1);
+let turb=parseFloat(data.field2);
+let ph=parseFloat(data.field3);
+
+let tempEl=document.getElementById("temp");
+let turbEl=document.getElementById("turb");
+let phEl=document.getElementById("ph");
+
+tempEl.innerHTML=temp.toFixed(1)+" °C";
+turbEl.innerHTML=turb+" NTU";
+phEl.innerHTML=ph.toFixed(2);
+
+document.getElementById("liveTime").innerText=
+"Updated: "+new Date().toLocaleTimeString();
+
+tempEl.style.color="white";
+turbEl.style.color="white";
+phEl.style.color="white";
+
+let problems=[];
+
+if(temp>=40){
+
+tempEl.style.color="#ef4444";
+
+problems.push("High temperature");
+
+}
+
+if(turb>=160){
+
+turbEl.style.color="#ef4444";
+
+problems.push("Water is muddy");
+
+}
+
+if(ph<6.5 || ph>9){
+
+phEl.style.color="#ef4444";
+
+if(ph<6.5){
+
+problems.push("Water is acidic");
+
+}
+else{
+
+problems.push("Water is alkaline");
+
+}
+
+}
+
+let status=document.getElementById("status");
+
+let alert=document.getElementById("alert");
+
+if(problems.length===0){
+
+status.innerText="SAFE";
+
+status.className="value safe";
+
+document.getElementById("waterCondition")
+.innerText="Water quality is within safe range";
+
+alertShown=false;
+
+}
+else{
+
+status.innerText="UNSAFE";
+
+status.className="value unsafe";
+
+document.getElementById("waterCondition")
+.innerText=problems.join(", ");
+
+let alerts = JSON.parse(localStorage.getItem("alertHistory")) || [];
+
+alerts.push({
+    time: new Date().toLocaleString(),
+    temperature: temp.toFixed(1),
+    turbidity: turb,
+    ph: ph.toFixed(2),
+    issue: problems.join(", ")
+});
+
+console.log("Saving Alert:", alerts);
+
+localStorage.setItem("alertHistory", JSON.stringify(alerts));
+
+console.log(localStorage.getItem("alertHistory"));
+
+if(!alertShown){
+
+let box=document.getElementById("customAlert");
+
+box.classList.add("show");
+
+setTimeout(()=>{
+
+box.classList.remove("show");
+
+},15000);
+
+alertShown=true;
+
+}
+
+}
+
+})
+
+.catch(error=>{
+
+document.getElementById("status").innerText =
+"SYSTEM OFFLINE";
+
+document.getElementById("status").className =
+"value unsafe";
+
+document.getElementById("waterCondition").innerText =
+"Unable to receive live data from cloud";
+
+document.getElementById("temp").innerText="--";
+document.getElementById("turb").innerText="--";
+document.getElementById("ph").innerText="--";
+
+});
+
+}
+
+updateData();
+
+setInterval(updateData,15000);
+
+</script>
+
+<div id="customAlert">
+⚠ Unsafe Water Condition Detected !
+</div>
+
+</body>
+
+</html>

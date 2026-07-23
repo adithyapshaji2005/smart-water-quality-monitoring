@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alert History</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Poppins',sans-serif;
+background:#0b1120;
+color:white;
+margin:0;
+padding:0;
+}
+
+.container{
+padding:30px;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#111827;
+}
+
+th{
+background:#1e293b;
+padding:15px;
+text-align:left;
+}
+
+td{
+padding:15px;
+border-top:1px solid #334155;
+}
+
+.empty{
+text-align:center;
+padding:20px;
+color:#94a3b8;
+}
+
+button{
+padding:10px 15px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Alert History</h1>
+
+<button onclick="window.location.href='admin.html'">
+← Back to Admin Dashboard
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>Date & Time</th>
+<th>Temperature</th>
+<th>Turbidity</th>
+<th>pH</th>
+<th>Issue</th>
+</tr>
+</thead>
+
+<tbody id="alertTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let alerts = JSON.parse(localStorage.getItem("alertHistory")) || [];
+
+let table = document.getElementById("alertTable");
+
+if(alerts.length === 0){
+
+table.innerHTML =
+"<tr><td colspan='5' class='empty'>No Alert History Available</td></tr>";
+
+}
+else{
+
+alerts.reverse().forEach(alert => {
+
+table.innerHTML += `
+<tr>
+<td>${alert.time}</td>
+<td>${alert.temperature} °C</td>
+<td>${alert.turbidity}</td>
+<td>${alert.ph}</td>
+<td>${alert.issue}</td>
+</tr>
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>

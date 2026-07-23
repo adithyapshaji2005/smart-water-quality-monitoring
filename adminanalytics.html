@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#0b1120;
+color:white;
+display:flex;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.sidebar{
+width:260px;
+background:#111827;
+padding:30px 20px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+position:fixed;
+height:100vh;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+margin-bottom:50px;
+}
+
+.logo span{
+color:#38bdf8;
+}
+
+.menu a{
+display:block;
+text-decoration:none;
+color:#cbd5e1;
+padding:14px 18px;
+border-radius:14px;
+margin-bottom:14px;
+transition:0.3s;
+font-size:15px;
+}
+
+.menu a:hover,
+.menu a.active{
+background:#1e293b;
+color:white;
+}
+
+.sidebar-footer{
+background:linear-gradient(135deg,#2563eb,#38bdf8);
+padding:20px;
+border-radius:20px;
+font-size:14px;
+line-height:1.6;
+}
+
+.main{
+margin-left:260px;
+width:calc(100% - 260px);
+padding:35px;
+}
+
+.graphs{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:24px;
+}
+
+.graph-card{
+background:#111827;
+padding:20px;
+border-radius:24px;
+}
+
+.graph-card h3{
+margin-bottom:18px;
+}
+
+.graph-card iframe{
+width:100%;
+height:280px;
+border:none;
+border-radius:16px;
+background:white;
+}
+
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+
+<div>
+
+<div class="logo">
+💧 Water<span>Monitor</span>
+</div>
+
+<div class="menu">
+
+<a href="index.html">Dashboard</a>
+<a href="analytics.html" class="active">Analytics</a>
+<a href="alert-history.html">Alert History</a>
+<a href="#" onclick="logout()">Logout</a>
+
+</div>
+
+</div>
+
+<div class="sidebar-footer">
+Smart Water Quality Monitoring & Alert System using ESP32 and IoT.
+</div>
+
+</div>
+
+<div class="main">
+
+<h1>Analytics</h1>
+
+<br><br>
+
+<div id="offlineMessage"
+style="display:none;text-align:center;background:#111827;padding:40px;border-radius:24px;">
+
+<h2>🔴 System Offline</h2>
+
+<br>
+
+<p>No recent sensor data available.</p>
+
+</div>
+
+<div id="graphsContainer" class="graphs">
+
+<div class="graph-card">
+
+<h3>Temperature Graph</h3>
+
+<iframe src="https://thingspeak.com/channels/3356770/charts/1?bgcolor=%23ffffff&color=%2338bdf8&dynamic=true&type=line"></iframe>
+
+</div>
+
+<div class="graph-card">
+
+<h3>Turbidity Graph</h3>
+
+<iframe src="https://thingspeak.com/channels/3356770/charts/2?bgcolor=%23ffffff&color=%237c3aed&dynamic=true&type=line"></iframe>
+
+</div>
+
+<div class="graph-card">
+
+<h3>pH Graph</h3>
+
+<iframe src="https://thingspeak.com/channels/3356770/charts/3?bgcolor=%23ffffff&color=%23ef4444&dynamic=true&type=line"></iframe>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function logout(){
+
+localStorage.removeItem("adminLoggedIn");
+
+window.location.href="adminlogin.html";
+
+}
+
+fetch("https://api.thingspeak.com/channels/3356770/feeds/last.json")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let lastUpdate = new Date(data.created_at);
+
+let now = new Date();
+
+let diff = (now - lastUpdate)/1000;
+
+if(diff > 90){
+
+document.getElementById("graphsContainer").style.display="none";
+
+document.getElementById("offlineMessage").style.display="block";
+
+}
+
+})
+
+.catch(error=>{
+
+document.getElementById("graphsContainer").style.display="none";
+
+document.getElementById("offlineMessage").style.display="block";
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Project</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#0b1120;
+color:white;
+display:flex;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.sidebar{
+width:260px;
+background:#111827;
+padding:30px 20px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+position:fixed;
+height:100vh;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+margin-bottom:50px;
+}
+
+.logo span{
+color:#38bdf8;
+}
+
+.menu a{
+display:block;
+text-decoration:none;
+color:#cbd5e1;
+padding:14px 18px;
+border-radius:14px;
+margin-bottom:14px;
+transition:0.3s;
+font-size:15px;
+}
+
+.menu a:hover,
+.menu a.active{
+background:#1e293b;
+color:white;
+}
+
+.sidebar-footer{
+background:linear-gradient(135deg,#2563eb,#38bdf8);
+padding:20px;
+border-radius:20px;
+font-size:14px;
+line-height:1.6;
+}
+
+.main{
+margin-left:260px;
+width:calc(100% - 260px);
+padding:35px;
+}
+
+.card{
+background:#111827;
+padding:35px;
+border-radius:24px;
+line-height:1.9;
+font-size:16px;
+}
+
+.card h2{
+margin-bottom:20px;
+}
+
+.card ul{
+padding-left:20px;
+margin-top:10px;
+}
+
+.card li{
+margin-bottom:10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+
+<div>
+
+<div class="logo">
+💧 Water<span>Monitor</span>
+</div>
+
+<div class="menu">
+
+<a href="index.html">Dashboard</a>
+<a href="analytics.html">Analytics</a>
+<a href="about.html" class="active">About Project</a>
+<a href="#" onclick="logout()">Logout</a>
+
+</div>
+
+</div>
+
+<div class="sidebar-footer">
+Smart Water Quality Monitoring & Alert System using ESP32 and IoT.
+</div>
+
+</div>
+
+<div class="main">
+
+<h1>About Project</h1>
+
+<br><br>
+
+<div class="card">
+
+<h2>Smart Water Quality Monitoring & Alert System</h2>
+
+<p>
+This project is an IoT based Smart Water Quality Monitoring and Alert System developed using ESP32 microcontroller and multiple sensors.
+</p>
+
+<br>
+
+<p>
+The system continuously monitors important water quality parameters and sends the sensor readings to ThingSpeak cloud platform for real-time monitoring.
+</p>
+
+<br>
+
+<h3>Components Used</h3>
+
+<ul>
+<li>ESP32 Microcontroller</li>
+<li>DS18B20 Temperature Sensor</li>
+<li>Turbidity Sensor</li>
+<li>pH Sensor</li>
+<li>ThingSpeak Cloud Platform</li>
+<li>Web Dashboard</li>
+</ul>
+
+<br>
+
+<h3>Features</h3>
+
+<ul>
+<li>Real-time water quality monitoring</li>
+<li>Live dashboard updates</li>
+<li>Cloud data storage</li>
+<li>Analytics graphs</li>
+<li>Water safety status detection</li>
+</ul>
+
+</div>
+
+</div>
+
+<script>
+
+function logout(){
+
+localStorage.clear();
+
+window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+</html>

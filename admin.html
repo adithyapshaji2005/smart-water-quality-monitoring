@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#0b1120;
+color:white;
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#111827;
+padding:30px 20px;
+position:fixed;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+}
+
+.logo span{
+color:#38bdf8;
+}
+
+.menu{
+margin-top:40px;
+}
+
+.menu a{
+display:block;
+text-decoration:none;
+color:#cbd5e1;
+padding:14px;
+border-radius:14px;
+margin-bottom:14px;
+transition:.3s;
+}
+
+.menu a:hover{
+background:#1e293b;
+}
+
+.sidebar-footer{
+background:linear-gradient(135deg,#2563eb,#38bdf8);
+padding:18px;
+border-radius:18px;
+font-size:14px;
+line-height:1.6;
+}
+
+.main{
+margin-left:260px;
+width:100%;
+padding:35px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:35px;
+}
+
+.live{
+background:#16a34a;
+padding:10px 18px;
+border-radius:999px;
+font-size:14px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:#111827;
+padding:25px;
+border-radius:25px;
+}
+
+.card h3{
+margin-bottom:15px;
+color:#94a3b8;
+}
+
+.value{
+font-size:35px;
+font-weight:700;
+}
+
+.safe{
+color:#22c55e;
+}
+
+.unsafe{
+color:#ef4444;
+}
+
+.controls{
+margin-top:30px;
+background:#111827;
+padding:25px;
+border-radius:25px;
+}
+
+.controls h2{
+margin-bottom:20px;
+}
+
+button{
+padding:12px 20px;
+margin-right:10px;
+margin-bottom:10px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+font-family:Poppins;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+#adminOutput{
+margin-top:20px;
+padding:15px;
+background:#1e293b;
+border-radius:15px;
+line-height:1.8;
+color:#cbd5e1;
+min-height:80px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div>
+
+<div class="logo">
+💧 Water<span>Monitor</span>
+</div>
+
+<div class="menu">
+
+<a href="admin.html" class="active">Dashboard</a>
+
+<a href="adminanalytics.html">Analytics</a>
+
+<a href="alert-history.html">Alert History</a>
+
+<a href="adminlogin.html" onclick="logout()">Logout</a>
+
+</div>
+
+</div>
+
+<div class="sidebar-footer">
+
+Admin Monitoring Panel<br>
+Smart Water Quality Monitoring System
+
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>Admin Dashboard</h1>
+
+<div class="live" id="liveTime">
+
+● LIVE DATA
+
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Temperature</h3>
+
+<div class="value" id="temp">
+
+--
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Turbidity</h3>
+
+<div class="value" id="turb">
+
+--
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>pH Value</h3>
+
+<div class="value" id="ph">
+
+--
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Water Status</h3>
+
+<div class="value safe" id="status">
+
+--
+
+</div>
+
+</div>
+
+</div>
+
+<div class="controls">
+
+<h2>Admin Controls</h2>
+
+<button onclick="viewRecords()">
+View Records
+</button>
+
+<button onclick="systemMonitor()">
+System Monitoring
+</button>
+
+<button onclick="window.location.href='alert-history.html'">
+Alert History
+</button>
+
+<div id="adminOutput">
+
+<b>Welcome Admin</b><br><br>
+
+Monitor live sensor data, review alert history,
+view analytics and supervise overall water quality status.
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("adminLoggedIn")!=="true"){
+
+window.location.href="adminlogin.html";
+
+}
+
+function logout(){
+
+localStorage.removeItem("adminLoggedIn");
+
+window.location.href="adminlogin.html";
+
+}
+
+function updateData(){
+
+fetch("https://api.thingspeak.com/channels/3356770/feeds/last.json")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let temp=parseFloat(data.field1);
+let turb=parseFloat(data.field2);
+let ph=parseFloat(data.field3);
+
+document.getElementById("temp").innerHTML=
+temp.toFixed(1)+" °C";
+
+document.getElementById("turb").innerHTML=
+turb+" NTU";
+
+document.getElementById("ph").innerHTML=
+ph.toFixed(2);
+
+document.getElementById("temp").style.color="white";
+document.getElementById("turb").style.color="white";
+document.getElementById("ph").style.color="white";
+
+document.getElementById("liveTime").innerHTML=
+"Updated: "+new Date().toLocaleTimeString();
+
+let status=document.getElementById("status");
+
+if(temp>=40){
+
+document.getElementById("temp").style.color="#ef4444";
+
+}
+
+if(turb>=160){
+
+document.getElementById("turb").style.color="#ef4444";
+
+}
+
+if(ph<6.5 || ph>9){
+
+document.getElementById("ph").style.color="#ef4444";
+
+}
+
+if(ph>=6.5 && ph<=9 && turb<200){
+
+    status.innerHTML="SAFE";
+    status.className="value safe";
+
+    localStorage.removeItem("activeAlert");
+
+}
+else{
+
+    status.innerHTML="UNSAFE";
+    status.className="value unsafe";
+
+    if(!localStorage.getItem("activeAlert")){
+
+        let alerts = JSON.parse(localStorage.getItem("alertHistory")) || [];
+
+        alerts.push({
+
+            time: new Date().toLocaleString(),
+
+            temperature: temp.toFixed(1),
+
+            turbidity: turb,
+
+            ph: ph.toFixed(2),
+
+            issue: turb >= 200 ? "Water is muddy" : "Water quality issue"
+
+        });
+
+        localStorage.setItem("alertHistory", JSON.stringify(alerts));
+
+        localStorage.setItem("activeAlert","true");
+
+    }
+
+}
+
+});
+
+}
+
+function viewRecords(){
+
+fetch("https://api.thingspeak.com/channels/3356770/feeds/last.json")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+document.getElementById("adminOutput").innerHTML=
+
+"<b>Latest Sensor Records</b><br><br>"+
+
+"🌡 Temperature : "+data.field1+" °C<br>"+
+
+"💧 Turbidity : "+data.field2+" NTU<br>"+
+
+"🧪 pH : "+parseFloat(data.field3).toFixed(2);
+
+});
+
+}
+
+function systemMonitor(){
+
+document.getElementById("adminOutput").innerHTML=
+
+"<b>System Information</b><br><br>"+
+
+"🟢 Cloud Platform : ThingSpeak Active<br><br>"+
+
+"🟢 Live Sensor Data : Available<br><br>"+
+
+"🟢 Alert Detection : Enabled<br><br>"+
+
+"🕒 Last Updated : "+new Date().toLocaleTimeString();
+
+}
+
+updateData();
+
+setInterval(updateData,15000);
+
+</script>
+
+</body>
+
+</html>
